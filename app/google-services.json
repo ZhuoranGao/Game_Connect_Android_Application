@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1018453380779",
+    "project_id": "numad-final-project-33b62",
+    "storage_bucket": "numad-final-project-33b62.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018453380779:android:b4115cf643545b97d031ee",
+        "android_client_info": {
+          "package_name": "com.example.cs4520_final_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1018453380779-tfmlbm7meo5143klikmntqf6rlao4imh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiqPuhrbkHHy7pd0-liKI4y8m32XIABWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1018453380779-tfmlbm7meo5143klikmntqf6rlao4imh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
