@@ -7,7 +7,7 @@
     tools:context=".AfterLoginMainActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView5"
+        android:id="@+id/fragmentContainerView_AfterLogin"
         android:name="com.example.cs4520_final_project.Fragments.HomeScreenFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"

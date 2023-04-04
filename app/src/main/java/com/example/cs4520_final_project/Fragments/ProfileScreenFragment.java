@@ -1,14 +1,20 @@
 package com.example.cs4520_final_project.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.cs4520_final_project.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,15 +22,17 @@ import com.example.cs4520_final_project.R;
  * create an instance of this fragment.
  */
 public class ProfileScreenFragment extends Fragment {
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+    private FirebaseFirestore db;
+
+    private IProfileFragmentButtonAction mListener;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private Button logout_btn;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
 
     public ProfileScreenFragment() {
         // Required empty public constructor
@@ -42,8 +50,7 @@ public class ProfileScreenFragment extends Fragment {
     public static ProfileScreenFragment newInstance(String param1, String param2) {
         ProfileScreenFragment fragment = new ProfileScreenFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,8 +59,28 @@ public class ProfileScreenFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            Bundle args = getArguments();
+            db = FirebaseFirestore.getInstance();
+            mAuth = FirebaseAuth.getInstance();
+            mUser = mAuth.getCurrentUser();
+            //readUsers();
+        } else {
+
+            db = FirebaseFirestore.getInstance();
+            mAuth = FirebaseAuth.getInstance();
+            mUser = mAuth.getCurrentUser();
+
+            //readUsers();
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(context instanceof IProfileFragmentButtonAction){
+            mListener = (IProfileFragmentButtonAction) context;
+        }else{
+            throw new RuntimeException(context.toString()+ "must implement IaddButtonAction");
         }
     }
 
@@ -61,6 +88,20 @@ public class ProfileScreenFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_screen, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_profile_screen, container, false);
+        logout_btn = rootView.findViewById(R.id.log_out_btn);
+        logout_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.logoutPressed();
+            }
+        });
+
+        return rootView;
+    }
+
+
+    public interface IProfileFragmentButtonAction {
+        void logoutPressed();
     }
 }
