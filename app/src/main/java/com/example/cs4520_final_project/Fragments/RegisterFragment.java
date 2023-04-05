@@ -1,16 +1,28 @@
 package com.example.cs4520_final_project.Fragments;
 
+import static android.content.ContentValues.TAG;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.cs4520_final_project.Models.User;
 import com.example.cs4520_final_project.R;
@@ -38,6 +50,8 @@ public class RegisterFragment extends Fragment {
     private Button register_submit_btn,register_locate_btn;
     private String email,username,name,password,rep_password;
     private IregisterFragmentAction mListener;
+    private LocationManager locationManager;
+    private TextView location_textView;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -96,6 +110,23 @@ public class RegisterFragment extends Fragment {
         register_password = rootView.findViewById(R.id.register_password);
         register_password2 = rootView.findViewById(R.id.register_password2);
         register_submit_btn = rootView.findViewById(R.id.register_submission_button);
+        location_textView=rootView.findViewById(R.id.location_textView);
+        locationManager=(LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if(ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED&&
+        ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},1);
+        }
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 1, new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                Log.d(TAG, "onLocationChanged: "+String.valueOf(location.getLongitude()));
+                Log.d(TAG, "onLocationChanged: "+String.valueOf(location.getLatitude()));
+                location_textView.setText(String.format("%.3f",location.getLatitude())+", "+String.valueOf(location.getLongitude()));
+            }
+        });
+
+
 
         //
         register_submit_btn.setOnClickListener(new View.OnClickListener() {
