@@ -6,6 +6,7 @@ public class User {
     public String imageURL;
 
 
+
     public User(String uid,String name, String display_name, String email,String imageURL) {
         this.name = name;
         this.user_name = display_name;
@@ -26,6 +27,12 @@ public class User {
     }
 
 
-
-
+    public User(String uid, String name, String user_name, String email, String location, String imageURL) {
+        this.uid = uid;
+        this.name = name;
+        this.user_name = user_name;
+        this.email = email;
+        Location = location;
+        this.imageURL = imageURL;
+    }
 }

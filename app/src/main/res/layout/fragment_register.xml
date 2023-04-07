@@ -7,21 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.RegisterFragment">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="143dp"
-        android:layout_height="108dp"
-        android:layout_marginTop="24dp"
-        android:src="@drawable/game_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-8dp"
+        android:layout_marginTop="16dp"
         android:text="Register"
         android:textColor="#3F51B5"
         android:textSize="30dp"
@@ -29,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/register_select_image"
@@ -85,8 +75,8 @@
         android:text="Location:"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@+id/register_password2"
-        tools:layout_editor_absoluteX="101dp" />
+        app:layout_constraintStart_toStartOf="@+id/register_password2"
+        app:layout_constraintTop_toBottomOf="@+id/register_password2" />
 
     <Button
         android:id="@+id/button_register_location"
@@ -102,10 +92,12 @@
         android:id="@+id/location_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="82dp"
-        android:text="Location will be here"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="3dp"
+        android:shadowColor="#3F51B5"
+        android:text="Click the button to get location."
+        android:textColor="@color/black"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toTopOf="@+id/textView2" />

@@ -5,6 +5,8 @@ import static android.content.ContentValues.TAG;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -23,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cs4520_final_project.Models.User;
 import com.example.cs4520_final_project.R;
@@ -35,6 +38,10 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link RegisterFragment#newInstance} factory method to
@@ -46,9 +53,9 @@ public class RegisterFragment extends Fragment {
     private FirebaseUser mUser;
 
     private ImageView register_select_avatar;
-    private EditText register_email,register_username,register_name,register_password,register_password2;
-    private Button register_submit_btn,register_locate_btn;
-    private String email,username,name,password,rep_password;
+    private EditText register_email, register_username, register_name, register_password, register_password2;
+    private Button register_submit_btn, register_locate_btn;
+    private String email, username, name, password, rep_password,location;
     private IregisterFragmentAction mListener;
     private LocationManager locationManager;
     private TextView location_textView;
@@ -97,6 +104,17 @@ public class RegisterFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof IregisterFragmentAction) {
+            this.mListener = (IregisterFragmentAction) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + "must implement RegisterRquest");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -110,19 +128,19 @@ public class RegisterFragment extends Fragment {
         register_password = rootView.findViewById(R.id.register_password);
         register_password2 = rootView.findViewById(R.id.register_password2);
         register_submit_btn = rootView.findViewById(R.id.register_submission_button);
-        location_textView=rootView.findViewById(R.id.location_textView);
-        locationManager=(LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-        if(ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED&&
-        ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},1);
+        location_textView = rootView.findViewById(R.id.location_textView);
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 1, new LocationListener() {
+        //implement the function of locate button.
+        register_locate_btn = rootView.findViewById(R.id.button_register_location);
+        register_locate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onLocationChanged(@NonNull Location location) {
-                Log.d(TAG, "onLocationChanged: "+String.valueOf(location.getLongitude()));
-                Log.d(TAG, "onLocationChanged: "+String.valueOf(location.getLatitude()));
-                location_textView.setText(String.format("%.3f",location.getLatitude())+", "+String.valueOf(location.getLongitude()));
+            public void onClick(View view) {
+                locate_user();
             }
         });
 
@@ -137,12 +155,48 @@ public class RegisterFragment extends Fragment {
         });
 
 
-
-
-
-
         return rootView;
     }
+
+    private void locate_user() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                Double MyLat = location.getLatitude();
+                Double MyLong = location.getLongitude();
+                Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+                List<Address> addresses = null;
+                try {
+                    addresses = geocoder.getFromLocation(MyLat, MyLong, 1);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                String cityName = addresses.get(0).getLocality();
+                String stateName = addresses.get(0).getAdminArea();
+                Log.d(TAG, "onLocationChanged: " + String.valueOf(location.getLongitude()));
+                Log.d(TAG, "onLocationChanged: " + String.valueOf(location.getLatitude()));
+                //location_textView.setText(String.format("%.3f",location.getLatitude())+", "+String.valueOf(location.getLongitude()));
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        location_textView.setText(cityName+" , "+stateName);
+                    }
+                });
+            }
+        });
+
+    }
+
 
     private void submit_register(){
         //get inputs from text fields.
@@ -151,6 +205,7 @@ public class RegisterFragment extends Fragment {
         this.password = String.valueOf(register_password.getText()).trim();
         this.rep_password = String.valueOf(register_password2.getText()).trim();
         this.name = String.valueOf(register_name.getText()).trim();
+        this.location = String.valueOf(location_textView.getText()).trim();
 
         // check inputs are not null.
         if(username.equals("")){
@@ -167,6 +222,14 @@ public class RegisterFragment extends Fragment {
         }
         if(name.equals("")){
             register_name.setError("Must input first name!");
+        }
+        if(location.equals("Click the button to get location.")){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(),"Please provide a location.",Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         //validation complete, then :
@@ -186,7 +249,8 @@ public class RegisterFragment extends Fragment {
                                 .build();
                         DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("Registered Users");
                         String uid = mAuth.getUid();
-                        User new_user = new User(uid,name,username, email);
+                        //String uid, String name, String user_name, String email, String location, String imageURL
+                        User new_user = new User(uid,name,username, email,location,"");
                         referenceProfile.child(mUser.getUid()).setValue(new_user);//.addOnCompleteListener(new OnCompleteListener<Void>() {
 
 
