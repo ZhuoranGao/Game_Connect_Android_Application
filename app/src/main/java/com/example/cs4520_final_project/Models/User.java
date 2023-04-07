@@ -1,9 +1,9 @@
 package com.example.cs4520_final_project.Models;
 
 public class User {
-    public String uid,name,user_name,email;
-    public String Location;
-    public String imageURL;
+    private String uid,name,user_name,email;
+    private String Location;
+    private String imageURL;
 
 
 
@@ -33,6 +33,54 @@ public class User {
         this.user_name = user_name;
         this.email = email;
         Location = location;
+        this.imageURL = imageURL;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getLocation() {
+        return Location;
+    }
+
+    public void setLocation(String location) {
+        Location = location;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
 }

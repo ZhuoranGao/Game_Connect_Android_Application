@@ -1,8 +1,10 @@
 package com.example.cs4520_final_project.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -10,9 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.cs4520_final_project.AfterLoginMainActivity;
 import com.example.cs4520_final_project.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +34,10 @@ public class StartFragment extends Fragment {
 
     private Button login_button;
     private Button register_button;
+    private FirebaseAuth mAuth;
+    private EditText email_input,password_input;
+    private String email,password;
+    private IloginFragmentAction mListener;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,13 +70,21 @@ public class StartFragment extends Fragment {
         return fragment;
     }
 
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof RegisterFragment.IregisterFragmentAction) {
+            this.mListener = (IloginFragmentAction) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + "must implement RegisterRquest");
+        }
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -70,6 +93,8 @@ public class StartFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_start, container, false);
 
+        email_input=rootView.findViewById(R.id.login_enter_email);
+        password_input=rootView.findViewById(R.id.login_enter_password);
         register_button = rootView.findViewById(R.id.buttonOpenRegister);
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,11 +111,53 @@ public class StartFragment extends Fragment {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent afterLogin = new Intent(getActivity(), AfterLoginMainActivity.class);
-                startActivity(afterLogin);
+                email = email_input.getText().toString().trim();
+                password = password_input.getText().toString().trim();
+                if(email.equals("")){
+                    email_input.setError("Must input email!");
+                }
+                if(password.equals("")){
+                    password_input.setError("Password must not be empty!");
+                }
+                if(!email.equals("") && !password.equals("")){
+//                    Sign in to the account....
+                    mAuth.signInWithEmailAndPassword(email,password)
+                            .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                @Override
+                                public void onSuccess(AuthResult authResult) {
+                                    Toast.makeText(getContext(), "Login Successful!", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getContext(), "Login Failed!"+e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            })
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if(task.isSuccessful()){
+                                        mListener.populateMainFragment(mAuth.getCurrentUser());
+                                    }
+                                }
+                            })
+                    ;
+                }
+//                Intent afterLogin = new Intent(getActivity(), AfterLoginMainActivity.class);
+//                startActivity(afterLogin);
             }
         });
 
         return rootView;
+    }
+
+
+
+
+
+    public interface IloginFragmentAction {
+        void populateMainFragment(FirebaseUser mUser);
+        void populateRegisterFragment();
     }
 }

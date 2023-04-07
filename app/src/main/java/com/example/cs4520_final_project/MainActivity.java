@@ -12,7 +12,7 @@ import com.example.cs4520_final_project.Fragments.StartFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity implements RegisterFragment.IregisterFragmentAction {
+public class MainActivity extends AppCompatActivity implements RegisterFragment.IregisterFragmentAction,StartFragment.IloginFragmentAction {
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     @Override
@@ -53,5 +53,21 @@ public class MainActivity extends AppCompatActivity implements RegisterFragment.
     public void registerDone(FirebaseUser mUser) {
         this.currentUser = mUser;
         populateScreen();
+    }
+
+
+    @Override
+    public void populateMainFragment(FirebaseUser mUser) {
+
+        this.currentUser = mUser;
+        populateScreen();
+    }
+
+    @Override
+    public void populateRegisterFragment() {
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerView, RegisterFragment.newInstance(),"registerFragment")
+                .commit();
     }
 }
