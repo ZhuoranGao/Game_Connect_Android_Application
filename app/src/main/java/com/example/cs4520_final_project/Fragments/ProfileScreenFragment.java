@@ -3,17 +3,15 @@ package com.example.cs4520_final_project.Fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.cs4520_final_project.Models.User;
@@ -39,9 +37,9 @@ public class ProfileScreenFragment extends Fragment {
     private FirebaseFirestore db;
     private Button editProfile_btn;
 
-    private TextView userName,location;
+    private TextView userName,location,name;
     private String userName_input,location_Input;
-    private ImageView imageView;
+    private ImageView avatar_image;
 
     private IProfileFragmentButtonAction mListener;
 
@@ -108,9 +106,10 @@ public class ProfileScreenFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_profile_screen, container, false);
         editProfile_btn=rootView.findViewById(R.id.save_btn);
 
-        imageView=rootView.findViewById(R.id.avatar_imageView);
+        avatar_image=rootView.findViewById(R.id.avatar_imageView);
         userName=rootView.findViewById(R.id.userName_profile);
         location=rootView.findViewById(R.id.location_profile);
+        name = rootView.findViewById(R.id.name_profile);
 /////////////load current profile info/////////////////
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -124,8 +123,13 @@ public class ProfileScreenFragment extends Fragment {
 
                 location.setText(user.getLocation());
                 userName.setText(user.getUser_name());
-                if(user.getImageURL()!=null){
-                    Glide.with(getContext()).load(user.getImageURL()).into(imageView);
+                name.setText(user.getName());
+
+                if(user.getImageURL().equals("")){
+                    avatar_image.setImageResource(R.drawable.default_avatar);
+                    //Glide.with(getContext()).load(user.getImageURL()).into(avatar_image);
+                } else{
+                    Glide.with(getContext()).load(user.getImageURL()).into(avatar_image);
                 }
             }
 
