@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cs4520_final_project.Models.Game;
 import com.example.cs4520_final_project.Models.User;
 import com.example.cs4520_final_project.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -231,10 +232,13 @@ public class RegisterFragment extends Fragment {
                         DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("Registered Users");
                         String uid = mAuth.getUid();
                         //String uid, String name, String user_name, String email, String location, String imageURL
-                        ArrayList games=new ArrayList<String>();
+                        ArrayList<String> games=new ArrayList<String>();
+                        ArrayList<String> friends=new ArrayList<String>();
                         games.add("default");
+                        friends.add("default");
 
-                        User new_user = new User(uid,name,username, email,location,"",games);
+
+                        User new_user = new User(uid,name,username, email,location,"",games,friends);
                         referenceProfile.child(mUser.getUid()).setValue(new_user);//.addOnCompleteListener(new OnCompleteListener<Void>() {
 
 

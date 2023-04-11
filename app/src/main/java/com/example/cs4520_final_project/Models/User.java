@@ -7,6 +7,7 @@ public class User {
     private String Location;
     private String imageURL;
     private ArrayList<String> games;
+    private ArrayList<String> friend;
 
 
 
@@ -38,7 +39,7 @@ public class User {
         this.games = games;
     }
 
-    public User(String uid, String name, String user_name, String email, String location, String imageURL, ArrayList<String> games) {
+    public User(String uid, String name, String user_name, String email, String location, String imageURL, ArrayList<String> games,ArrayList<String> friend) {
         this.uid = uid;
         this.name = name;
         this.user_name = user_name;
@@ -46,6 +47,7 @@ public class User {
         Location = location;
         this.imageURL = imageURL;
         this.games=games;
+        this.friend=friend;
     }
 
     public String getUid() {
@@ -94,5 +96,13 @@ public class User {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    public ArrayList<String> getFriend() {
+        return friend;
+    }
+
+    public void setFriend(ArrayList<String> friend) {
+        this.friend = friend;
     }
 }

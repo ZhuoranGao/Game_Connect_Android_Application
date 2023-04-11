@@ -55,7 +55,9 @@ public class gameInfoActivity extends AppCompatActivity  {
 
         if(from_gameInfo!=null)
         {
+
             gameName =(String) from_gameInfo.get("game");
+            Log.d(TAG, "onCreate: kankangamename"+gameName);
         }
 
         play.setOnClickListener(new View.OnClickListener() {
