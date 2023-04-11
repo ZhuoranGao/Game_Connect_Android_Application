@@ -73,20 +73,23 @@ public class ProfileScreenFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            Bundle args = getArguments();
-            db = FirebaseFirestore.getInstance();
-            mAuth = FirebaseAuth.getInstance();
-            mUser = mAuth.getCurrentUser();
-            //readUsers();
-        } else {
-
-            db = FirebaseFirestore.getInstance();
-            mAuth = FirebaseAuth.getInstance();
-            mUser = mAuth.getCurrentUser();
-
-            //readUsers();
-        }
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+//        if (getArguments() != null) {
+//            Bundle args = getArguments();
+//            db = FirebaseFirestore.getInstance();
+//            mAuth = FirebaseAuth.getInstance();
+//            mUser = mAuth.getCurrentUser();
+//            //readUsers();
+//        } else {
+//
+//            db = FirebaseFirestore.getInstance();
+//            mAuth = FirebaseAuth.getInstance();
+//            mUser = mAuth.getCurrentUser();
+//
+//            //readUsers();
+//        }
     }
 
     @Override
@@ -121,8 +124,7 @@ public class ProfileScreenFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user= snapshot.getValue(User.class);
 
-                location.setText(user.getLocation());
-                userName.setText(user.getUser_name());
+
                 name.setText(user.getName());
 
                 if(user.getImageURL().equals("")){

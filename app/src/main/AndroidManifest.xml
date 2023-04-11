@@ -16,6 +16,12 @@
         android:theme="@style/Theme.CS4520_Final_Project"
         tools:targetApi="31">
         <activity
+            android:name=".findGameBudActivity"
+            android:exported="false" />
+        <activity
+            android:name=".gameInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".editProfileActivity"
             android:exported="false" />
         <activity

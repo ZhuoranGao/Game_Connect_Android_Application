@@ -39,6 +39,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -230,7 +231,10 @@ public class RegisterFragment extends Fragment {
                         DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("Registered Users");
                         String uid = mAuth.getUid();
                         //String uid, String name, String user_name, String email, String location, String imageURL
-                        User new_user = new User(uid,name,username, email,location,"");
+                        ArrayList games=new ArrayList<String>();
+                        games.add("default");
+
+                        User new_user = new User(uid,name,username, email,location,"",games);
                         referenceProfile.child(mUser.getUid()).setValue(new_user);//.addOnCompleteListener(new OnCompleteListener<Void>() {
 
 

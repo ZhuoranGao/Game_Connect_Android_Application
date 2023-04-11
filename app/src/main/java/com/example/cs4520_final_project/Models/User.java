@@ -1,39 +1,51 @@
 package com.example.cs4520_final_project.Models;
 
+import java.util.ArrayList;
+
 public class User {
     private String uid,name,user_name,email;
     private String Location;
     private String imageURL;
+    private ArrayList<String> games;
 
 
 
-    public User(String uid,String name, String display_name, String email,String imageURL) {
-        this.name = name;
-        this.user_name = display_name;
-        this.email = email;
-        this.uid = uid;
-        this.imageURL = imageURL;
-    }
+//    public User(String uid,String name, String display_name, String email,String imageURL) {
+//        this.name = name;
+//        this.user_name = display_name;
+//        this.email = email;
+//        this.uid = uid;
+//        this.imageURL = imageURL;
+//    }
 
     public User(){
 
     }
 
-    public User(String uid, String name, String user_name, String email) {
-        this.uid = uid;
-        this.name = name;
-        this.user_name = user_name;
-        this.email = email;
+//    public User(String uid, String name, String user_name, String email) {
+//        this.uid = uid;
+//        this.name = name;
+//        this.user_name = user_name;
+//        this.email = email;
+//    }
+
+
+    public ArrayList getGames() {
+        return games;
     }
 
+    public void setGames(ArrayList<String> games) {
+        this.games = games;
+    }
 
-    public User(String uid, String name, String user_name, String email, String location, String imageURL) {
+    public User(String uid, String name, String user_name, String email, String location, String imageURL, ArrayList<String> games) {
         this.uid = uid;
         this.name = name;
         this.user_name = user_name;
         this.email = email;
         Location = location;
         this.imageURL = imageURL;
+        this.games=games;
     }
 
     public String getUid() {
