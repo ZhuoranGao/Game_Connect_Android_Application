@@ -113,7 +113,7 @@ public class ProfileScreenFragment extends Fragment {
         userName=rootView.findViewById(R.id.userName_profile);
         location=rootView.findViewById(R.id.location_profile);
         name = rootView.findViewById(R.id.name_profile);
-/////////////load current profile info/////////////////
+        /////////////load current profile info/////////////////
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("Registered Users").child(mUser.getUid());
