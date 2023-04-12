@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class User {
     private String uid,name,user_name,email;
-    private String Location;
+    private String location;
     private String imageURL;
     private ArrayList<String> games;
     private ArrayList<String> friend;
@@ -44,7 +44,7 @@ public class User {
         this.name = name;
         this.user_name = user_name;
         this.email = email;
-        Location = location;
+        this.location = location;
         this.imageURL = imageURL;
         this.games=games;
         this.friend=friend;
@@ -83,11 +83,11 @@ public class User {
     }
 
     public String getLocation() {
-        return Location;
+        return this.location;
     }
 
     public void setLocation(String location) {
-        Location = location;
+        this.location = location;
     }
 
     public String getImageURL() {

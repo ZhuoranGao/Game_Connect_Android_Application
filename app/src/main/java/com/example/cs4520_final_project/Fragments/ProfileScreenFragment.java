@@ -126,6 +126,8 @@ public class ProfileScreenFragment extends Fragment {
 
 
                 name.setText(user.getName());
+                userName.setText(user.getUser_name());
+                location.setText(user.getLocation());
 
                 if(user.getImageURL().equals("")){
                     avatar_image.setImageResource(R.drawable.default_avatar);
