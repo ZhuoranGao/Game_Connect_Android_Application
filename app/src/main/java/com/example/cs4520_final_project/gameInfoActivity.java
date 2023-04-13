@@ -9,10 +9,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.cs4520_final_project.Fragments.HomeScreenFragment;
+import com.example.cs4520_final_project.Models.Game;
 import com.example.cs4520_final_project.Models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,20 +32,37 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 public class gameInfoActivity extends AppCompatActivity  {
+    private Game curr_game;
     private ImageView play,find;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private FirebaseFirestore db;
     private String gameName;
 
+    private TextView game_title,player_number;
+    private ImageView game_banner;
+    private Button go_back_button;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_info);
+
+        // get the game
+        curr_game = (Game) getIntent().getSerializableExtra("game");
+
+        //match with the variables.
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
+        game_banner = findViewById(R.id.game_banner_info);
+        game_title = findViewById(R.id.game_title_info);
+        player_number = findViewById(R.id.number_of_player);
 
+        Glide.with(gameInfoActivity.this).load(curr_game.image_URL).into(game_banner);
+        game_title.setText(curr_game.getName());
+        player_number.setText(String.valueOf(curr_game.getPlayer_number()));
 
 
 
@@ -49,7 +70,7 @@ public class gameInfoActivity extends AppCompatActivity  {
 
         play=findViewById(R.id.I_play_the_game);
 
-
+        /**
         Intent gameNameIntent= getIntent();
         Bundle from_gameInfo = gameNameIntent.getExtras();
 
@@ -58,7 +79,7 @@ public class gameInfoActivity extends AppCompatActivity  {
 
             gameName =(String) from_gameInfo.get("game");
             Log.d(TAG, "onCreate: kankangamename"+gameName);
-        }
+        }**/
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,9 +93,22 @@ public class gameInfoActivity extends AppCompatActivity  {
 
                             ArrayList<String>newGameList=(ArrayList<String>)task.getResult().getValue();
                             //ArrayList<String>newGamw=new ArrayList<String>();
-                            newGameList.add(gameName);
+                            // check if the user already added the game
+                            for(String game : newGameList){
+                                if (game.equals(curr_game.name)){
+                                    Toast.makeText(gameInfoActivity.this, "You have already added!", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                            }
+                            //increase the number of player_number
+                            DatabaseReference ref_game = database.getReference("Games").child(String.valueOf(curr_game.getApp_id())).child("player_number");
+
+                            curr_game.player_number = curr_game.player_number + 1;
+                            newGameList.add(curr_game.name);
                             ref.setValue(newGameList);
-                            Toast.makeText(gameInfoActivity.this, "it is added!", Toast.LENGTH_LONG).show();
+                            ref_game.setValue(curr_game.player_number);
+                            player_number.setText(String.valueOf(curr_game.getPlayer_number()));
+                            Toast.makeText(gameInfoActivity.this, "You have added this game to your list!", Toast.LENGTH_LONG).show();
 
                         }
                     }
@@ -91,7 +125,7 @@ public class gameInfoActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 Intent toFindBud=new Intent(gameInfoActivity.this, findGameBudActivity.class);
-                toFindBud.putExtra("game",gameName);
+                toFindBud.putExtra("game",curr_game.name);
                 startActivity(toFindBud);
             }
         });

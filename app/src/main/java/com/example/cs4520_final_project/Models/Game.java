@@ -1,6 +1,8 @@
 package com.example.cs4520_final_project.Models;
 
-public class Game {
+import java.io.Serializable;
+
+public class Game implements Serializable {
     public String name;
     public String developer,publisher,image_URL;
     public int app_id,player_number;

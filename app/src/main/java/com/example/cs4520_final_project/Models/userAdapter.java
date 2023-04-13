@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs4520_final_project.R;
-import com.example.cs4520_final_project.gameInfoActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,11 +61,11 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.name_card = itemView.findViewById(R.id.name_on_card);
+            this.name_card = itemView.findViewById(R.id.username_on_card);
             this.locationCard = itemView.findViewById(R.id.location_card);
-            this.add_card_btn = itemView.findViewById(R.id.add_btn_card);
+            this.add_card_btn = itemView.findViewById(R.id.chat_btn_friendScreen);
             //this.profile_card_btn = itemView.findViewById(R.id.profile_card);
-            this.card_image = itemView.findViewById(R.id.imageView6);
+            this.card_image = itemView.findViewById(R.id.avatar_image_friend);
         }
     }
     @NonNull

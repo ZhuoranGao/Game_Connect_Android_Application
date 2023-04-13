@@ -1,6 +1,7 @@
 package com.example.cs4520_final_project.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.cs4520_final_project.Models.Game;
 import com.example.cs4520_final_project.Models.User;
 import com.example.cs4520_final_project.R;
+import com.example.cs4520_final_project.gameInfoActivity;
 
 import java.util.ArrayList;
 
@@ -46,6 +48,15 @@ public class HomeScreen_Game_Adapter extends RecyclerView.Adapter<HomeScreen_Gam
         String banner_url = curr_game.getImage_URL();
         holder.game_name.setText(curr_game.getName());
         Glide.with(mContext).load(banner_url).into(holder.game_banner);
+
+        holder.game_banner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toGameInfo = new Intent(mContext, gameInfoActivity.class);
+                toGameInfo.putExtra("game", curr_game);
+                mContext.startActivity(toGameInfo);
+            }
+        });
 
     }
 

@@ -88,16 +88,7 @@ public class HomeScreenFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_home_screen, container, false);
 
-        try_btn = rootView.findViewById(R.id.test_temp_btn);
-        try_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent toEditProfile = new Intent(getContext(), gameInfoActivity.class);
-                String gameName = "00000000000";
-                toEditProfile.putExtra("game", gameName);
-                startActivity(toEditProfile);
-            }
-        });
+
 
         // implement the RecyclerView
         homeScreen_recyclerView = rootView.findViewById(R.id.recyclerView_HomeScreen);

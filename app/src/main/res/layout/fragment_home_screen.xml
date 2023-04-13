@@ -12,7 +12,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="-16dp"
         android:shadowColor="#9C27B0"
         android:shadowDx="10"
         android:shadowDy="10"
@@ -28,12 +28,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_HomeScreen"
         android:layout_width="300dp"
-        android:layout_height="350dp"
+        android:layout_height="440dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/grey_font"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#F3E5F5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,20 +40,12 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="206dp"
+        android:layout_height="114dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/game_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/test_temp_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="try"
-        tools:layout_editor_absoluteX="29dp"
-        tools:layout_editor_absoluteY="207dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,10 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
-import com.example.cs4520_final_project.Models.Game;
 import com.example.cs4520_final_project.Models.User;
 import com.example.cs4520_final_project.Models.userAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,10 +19,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -44,7 +40,7 @@ public class findGameBudActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_game_bud);
-        add_btn=findViewById(R.id.add_btn_card);
+        add_btn=findViewById(R.id.chat_btn_friendScreen);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
