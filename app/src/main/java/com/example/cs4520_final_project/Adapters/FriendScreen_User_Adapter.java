@@ -1,6 +1,7 @@
 package com.example.cs4520_final_project.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 
 public class FriendScreen_User_Adapter extends RecyclerView.Adapter<FriendScreen_User_Adapter.FriendScreenUserViewHolder> {
     private Context mContext;
-
+    private String TAG = "FINAL";
 
     private ArrayList<User> friends;
 
@@ -47,12 +48,13 @@ public class FriendScreen_User_Adapter extends RecyclerView.Adapter<FriendScreen
     @NonNull
     @Override
     public FriendScreenUserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.friendsscreen_user_cardview,parent,false);
+        View view= LayoutInflater.from(mContext).inflate(R.layout.friendsscreen_user_cardview,parent,false);
         return new FriendScreenUserViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FriendScreenUserViewHolder holder, int position) {
+        Log.d(TAG, "onBindViewHolder: " + friends);
         User curr_user = friends.get(position);
         holder.location.setText(curr_user.getLocation());
         //holder.uid.setText(curr_user.getUid());
@@ -67,7 +69,23 @@ public class FriendScreen_User_Adapter extends RecyclerView.Adapter<FriendScreen
             public void onClick(View view) {
                 AppCompatActivity curr_act = (AppCompatActivity) view.getContext();
                 //delete the value from local
-                friends.remove(curr_user.getUid());
+                int current_position = holder.getAdapterPosition();
+                friends.remove(current_position);
+                notifyDataSetChanged();
+                Log.d("final", "onClick delete: " + friends);
+
+                curr_act.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //notifyDataSetChanged();
+                        //notifyItemRemoved(current_position);
+                        //notifyItemRangeChanged (current_position, getItemCount());
+                        Toast.makeText(view.getContext(),"Successfully deleted a friend!",Toast.LENGTH_SHORT ).show();
+                    }
+                });
+
+
+
                 // do the change to the database.
                 mAuth = FirebaseAuth.getInstance();
                 mUser = mAuth.getCurrentUser();
@@ -76,9 +94,11 @@ public class FriendScreen_User_Adapter extends RecyclerView.Adapter<FriendScreen
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        friends.clear();
                         for(DataSnapshot uid:snapshot.getChildren()){
                             if(uid.getValue().equals(curr_user.getUid())){
                                 uid.getRef().removeValue();
+                                //notifyDataSetChanged();
                             }
                         }
                     }
@@ -88,13 +108,17 @@ public class FriendScreen_User_Adapter extends RecyclerView.Adapter<FriendScreen
 
                     }
                 });
+                //notifyDataSetChanged();
+                /**
                 curr_act.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //notifyDataSetChanged();
+                        notifyDataSetChanged();
+                        //notifyItemRemoved(position);
+                        //notifyItemRangeChanged(position, friends.size());
                         Toast.makeText(view.getContext(),"Successfully deleted a friend!",Toast.LENGTH_SHORT ).show();
                     }
-                });
+                });**/
 
 
 

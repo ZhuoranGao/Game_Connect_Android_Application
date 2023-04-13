@@ -42,6 +42,7 @@ public class FriendsScreenFragment extends Fragment {
     private ArrayList<String> friends_uid;
 
     private RecyclerView friends_list_recycler;
+    private FriendScreen_User_Adapter friend_adapter;
 
 
 
@@ -108,8 +109,7 @@ public class FriendsScreenFragment extends Fragment {
 
         friends_list_recycler = rootView.findViewById(R.id.recyclerView_friends);
         friends_list_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
-
-
+        //readFriends();
         return rootView;
     }
 
@@ -128,8 +128,9 @@ public class FriendsScreenFragment extends Fragment {
                         friends.add(user);
                     }
                 }
+                Log.d("TAG", "friends to pass into Friend Screen: " + friends);
                 FriendScreen_User_Adapter userAdapter = new FriendScreen_User_Adapter(getContext(),friends);
-                userAdapter.setmContext(getActivity());
+                //userAdapter.setmContext(getActivity());
                 friends_list_recycler.setAdapter(userAdapter);
             }
 
