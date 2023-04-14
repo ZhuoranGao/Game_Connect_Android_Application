@@ -12,8 +12,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.cs4520_final_project.Adapters.HomeScreen_Game_Adapter;
+import com.example.cs4520_final_project.Adapters.ProfileScreen_Game_Adapter;
+import com.example.cs4520_final_project.Models.Game;
 import com.example.cs4520_final_project.Models.User;
 import com.example.cs4520_final_project.R;
 import com.example.cs4520_final_project.editProfileActivity;
@@ -25,6 +30,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,11 +49,12 @@ public class ProfileScreenFragment extends Fragment {
     private ImageView avatar_image;
 
     private IProfileFragmentButtonAction mListener;
+    private RecyclerView recyclerView_profile;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private Button logout_btn;
-
+    private ArrayList<String> game_titles = new ArrayList<String>();
 
 
     public ProfileScreenFragment() {
@@ -76,6 +84,7 @@ public class ProfileScreenFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
+        readGames();
 //        if (getArguments() != null) {
 //            Bundle args = getArguments();
 //            db = FirebaseFirestore.getInstance();
@@ -90,6 +99,12 @@ public class ProfileScreenFragment extends Fragment {
 //
 //            //readUsers();
 //        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        readGames();
     }
 
     @Override
@@ -113,6 +128,9 @@ public class ProfileScreenFragment extends Fragment {
         userName=rootView.findViewById(R.id.userName_profile);
         location=rootView.findViewById(R.id.location_profile);
         name = rootView.findViewById(R.id.name_profile);
+        recyclerView_profile = rootView.findViewById(R.id.recyclerView_profile);
+        recyclerView_profile.setLayoutManager(new LinearLayoutManager(getContext()));
+
         /////////////load current profile info/////////////////
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -180,4 +198,35 @@ public class ProfileScreenFragment extends Fragment {
     public interface IProfileFragmentButtonAction {
         void logoutPressed();
     }
+
+
+    public void readGames(){
+        //FirebaseUser logUser = mUser;
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Registered Users").child(mUser.getUid()).child("games");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // users.clear();
+                for(DataSnapshot snap: snapshot.getChildren()){
+                    String game = snap.getValue(String.class);
+                    assert  game != null;
+                    //exclude the current user himself.
+                    if(!game.equals("default")){
+                        game_titles.add(game);
+                    }
+                }
+                ProfileScreen_Game_Adapter gameAdapter = new ProfileScreen_Game_Adapter(getContext(),game_titles);
+                //gameAdapter.setmContext(getActivity());
+                recyclerView_profile.setAdapter(gameAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
 }
