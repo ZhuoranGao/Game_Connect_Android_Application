@@ -5,30 +5,45 @@
     android:id="@+id/relativeLayout2"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
-    android:background="@color/grey_font"
     android:padding="8dp">
+
+
+    <TextView
+        android:id="@+id/chat_history_user_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:padding="8dp"
+        android:text="Username"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/show_message"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
         android:id="@+id/show_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_toRightOf="@id/profile_image"
+        android:layout_marginStart="8dp"
         android:background="@drawable/background_left"
         android:padding="8dp"
         android:text="hello"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintTop_toTopOf="@+id/profile_image" />
+        app:layout_constraintStart_toEndOf="@+id/chat_history_user_id"
+        app:layout_constraintTop_toTopOf="@+id/chat_history_user_id" />
 
     <ImageView
-        android:id="@+id/profile_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
+        android:id="@+id/sent_image_chat"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/background_left"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/chat_history_user_id"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/blue" />
 

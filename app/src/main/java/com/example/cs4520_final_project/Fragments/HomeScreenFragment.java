@@ -48,6 +48,8 @@ public class HomeScreenFragment extends Fragment {
 
     private Button try_btn;
 
+    private Boolean shouldRefreshOnResume;
+
 
     private HomeScreen_Game_Adapter gamesAdapter;
     private ArrayList<Game> games;
@@ -81,6 +83,13 @@ public class HomeScreenFragment extends Fragment {
         readGames();
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        readGames();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

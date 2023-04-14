@@ -1,6 +1,8 @@
 package com.example.cs4520_final_project.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +14,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.cs4520_final_project.ChatActivity;
 import com.example.cs4520_final_project.Models.User;
 import com.example.cs4520_final_project.Models.userAdapter;
 import com.example.cs4520_final_project.R;
@@ -123,6 +127,29 @@ public class FriendScreen_User_Adapter extends RecyclerView.Adapter<FriendScreen
 
 
 
+
+            }
+        });
+
+        holder.chat_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppCompatActivity curr_act = (AppCompatActivity) view.getContext();
+                FragmentManager fm = curr_act.getSupportFragmentManager();
+                Bundle bundle = new Bundle();
+                bundle.putString("user_to_talk_display_name", String.valueOf(curr_user.getUser_name()));
+                bundle.putString("user_to_talk_email", String.valueOf(curr_user.getEmail()));
+                bundle.putString("user_to_talk_uid", String.valueOf(curr_user.getUid()));
+
+
+                //ChatFragment to_chat = new ChatFragment();
+                //to_chat.setArguments(bundle);
+
+                //fm.beginTransaction().replace(R.id.fragmentContainerView_InClass8,to_chat,"starting chat").addToBackStack(null).commit();
+
+                Intent i = new Intent(mContext, ChatActivity.class);
+                i.putExtras(bundle);
+                mContext.startActivity(i);
 
             }
         });

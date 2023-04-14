@@ -37,6 +37,7 @@ public class gameInfoActivity extends AppCompatActivity  {
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private FirebaseFirestore db;
+    private DatabaseReference ref;
     private String gameName;
 
     private TextView game_title,player_number;
@@ -62,7 +63,23 @@ public class gameInfoActivity extends AppCompatActivity  {
 
         Glide.with(gameInfoActivity.this).load(curr_game.image_URL).into(game_banner);
         game_title.setText(curr_game.getName());
-        player_number.setText(String.valueOf(curr_game.getPlayer_number()));
+        //player_number.setText(String.valueOf(curr_game.getPlayer_number()));
+
+        ref = FirebaseDatabase.getInstance().getReference("Games").child(String.valueOf(curr_game.getApp_id()));
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Game curr_game = snapshot.getValue(Game.class);
+                int player_num = curr_game.getPlayer_number();
+                player_number.setText(String.valueOf(player_num));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
 
 

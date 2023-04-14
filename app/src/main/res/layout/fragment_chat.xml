@@ -67,17 +67,17 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <EditText
-            android:id="@+id/inclass08_text_send"
+            android:id="@+id/text_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginTop="13dp"
-            android:layout_toLeftOf="@id/inclass08_chat_btn_send"
+            android:layout_toLeftOf="@id/chat_btn_send"
             android:background="@android:color/transparent"
             android:hint="Type a message..." />
 
         <ImageButton
-            android:id="@+id/inclass08_chat_btn_send"
+            android:id="@+id/chat_btn_send"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentEnd="true"

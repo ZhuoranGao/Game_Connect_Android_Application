@@ -3,6 +3,7 @@ package com.example.cs4520_final_project.Models;
 import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.cs4520_final_project.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 public class userAdapter extends RecyclerView.Adapter<userAdapter.ViewHolder> {
+    private Context mContext;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
 
@@ -35,6 +38,10 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.ViewHolder> {
 
     public userAdapter(ArrayList<User> users) {
         this.users = users;
+    }
+    public userAdapter(Context mContext,ArrayList<User> users){
+        this.users = users;
+        this.mContext = mContext;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -80,6 +87,11 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.ViewHolder> {
 
         holder.getName_card().setText(users.get(position).getName());
         holder.getLocationCard().setText(users.get(position).getLocation());
+        if(!users.get(position).getImageURL().equals("")){
+            Glide.with(mContext).load(users.get(position).getImageURL()).into(holder.card_image);
+        }
+
+
         holder.getAdd_card_btn().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,7 +104,6 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.ViewHolder> {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         if(task.isSuccessful()){
-
                             ArrayList<String>newFriendsList=(ArrayList<String>)task.getResult().getValue();
                             //ArrayList<String>newGamw=new ArrayList<String>();
                             Log.d(TAG, "onComplete: "+newFriendsList.size());

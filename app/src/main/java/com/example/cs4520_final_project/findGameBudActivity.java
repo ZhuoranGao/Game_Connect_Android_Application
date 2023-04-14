@@ -97,7 +97,7 @@ public class findGameBudActivity extends AppCompatActivity {
                 recyclerView=findViewById(R.id.userRecyclerView);
                 layoutManager=new LinearLayoutManager(findGameBudActivity.this);
                 recyclerView.setLayoutManager(layoutManager);
-                useradapter=new userAdapter(users);
+                useradapter=new userAdapter(getApplicationContext(),users);
 
                 recyclerView.setAdapter(useradapter);
             }
