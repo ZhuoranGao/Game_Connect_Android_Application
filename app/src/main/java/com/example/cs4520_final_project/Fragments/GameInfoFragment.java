@@ -35,8 +35,6 @@ public class GameInfoFragment extends Fragment {
     public static GameInfoFragment newInstance() {
         GameInfoFragment fragment = new GameInfoFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }

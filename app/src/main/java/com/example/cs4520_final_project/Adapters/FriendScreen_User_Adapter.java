@@ -30,6 +30,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.checkerframework.common.returnsreceiver.qual.This;
+
 import java.util.ArrayList;
 
 public class FriendScreen_User_Adapter extends RecyclerView.Adapter<FriendScreen_User_Adapter.FriendScreenUserViewHolder> {
@@ -41,7 +43,7 @@ public class FriendScreen_User_Adapter extends RecyclerView.Adapter<FriendScreen
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private DatabaseReference reference;
-
+    User curr_user;
 
 
     public FriendScreen_User_Adapter(Context mContext, ArrayList<User> friends) {
@@ -57,9 +59,9 @@ public class FriendScreen_User_Adapter extends RecyclerView.Adapter<FriendScreen
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FriendScreenUserViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FriendScreenUserViewHolder holder, int position){
         Log.d(TAG, "onBindViewHolder: " + friends);
-        User curr_user = friends.get(position);
+        curr_user = friends.get(position);
         holder.location.setText(curr_user.getLocation());
         //holder.uid.setText(curr_user.getUid());
         holder.username.setText(curr_user.getUser_name());
@@ -74,35 +76,23 @@ public class FriendScreen_User_Adapter extends RecyclerView.Adapter<FriendScreen
                 AppCompatActivity curr_act = (AppCompatActivity) view.getContext();
                 //delete the value from local
                 int current_position = holder.getAdapterPosition();
-                friends.remove(current_position);
-                notifyDataSetChanged();
-                Log.d("final", "onClick delete: " + friends);
-
-                curr_act.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //notifyDataSetChanged();
-                        //notifyItemRemoved(current_position);
-                        //notifyItemRangeChanged (current_position, getItemCount());
-                        Toast.makeText(view.getContext(),"Successfully deleted a friend!",Toast.LENGTH_SHORT ).show();
-                    }
-                });
+                Log.d(TAG, "onClick: "+friends);
 
 
 
+                ///
                 // do the change to the database.
                 mAuth = FirebaseAuth.getInstance();
                 mUser = mAuth.getCurrentUser();
                 reference = FirebaseDatabase.getInstance().getReference("Registered Users").child(mUser.getUid()).child("friend");
-
-                reference.addValueEventListener(new ValueEventListener() {
+                reference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         friends.clear();
                         for(DataSnapshot uid:snapshot.getChildren()){
-                            if(uid.getValue().equals(curr_user.getUid())){
+                           if(uid.getValue().equals(curr_user.getUid())){
                                 uid.getRef().removeValue();
-                                //notifyDataSetChanged();
+                               //notifyDataSetChanged();
                             }
                         }
                     }
@@ -112,21 +102,71 @@ public class FriendScreen_User_Adapter extends RecyclerView.Adapter<FriendScreen
 
                     }
                 });
+
+                //reference.addValueEventListener(ValueEventListener);
+//                reference.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        //friends.clear();
+//                        for(DataSnapshot uid:snapshot.getChildren()){
+//                            if(uid.getValue().equals(curr_user.getUid())){
+//                                uid.getRef().removeValue();
+//                                //notifyDataSetChanged();
+//                            }
+//                        }
+//                        friends.clear();
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
+                ///
+
+
+                friends.remove(current_position);
+                //view.setVisibility(View.INVISIBLE);
+                Log.d(TAG, "onClick: "+friends);
+                notifyItemRemoved(current_position);
+                notifyItemRangeChanged(current_position, friends.size());
                 //notifyDataSetChanged();
-                /**
+                Log.d("final", "onClick delete: " + friends);
+
                 curr_act.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        notifyDataSetChanged();
-                        //notifyItemRemoved(position);
-                        //notifyItemRangeChanged(position, friends.size());
                         Toast.makeText(view.getContext(),"Successfully deleted a friend!",Toast.LENGTH_SHORT ).show();
                     }
-                });**/
+                });
 
 
 
-
+//                // do the change to the database.
+//                mAuth = FirebaseAuth.getInstance();
+//                mUser = mAuth.getCurrentUser();
+//                reference = FirebaseDatabase.getInstance().getReference("Registered Users").child(mUser.getUid()).child("friend");
+//                //reference.addValueEventListener(ValueEventListener);
+//                reference.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        //friends.clear();
+//                        for(DataSnapshot uid:snapshot.getChildren()){
+//                            if(uid.getValue().equals(curr_user.getUid())){
+//                                uid.getRef().removeValue();
+//                                //notifyDataSetChanged();
+//                            }
+//                        }
+//                        friends.clear();
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
 
             }
         });
@@ -169,6 +209,22 @@ public class FriendScreen_User_Adapter extends RecyclerView.Adapter<FriendScreen
     public void setFriends(ArrayList<User> friends) {
         this.friends = friends;
     }
+//
+//    @Override
+//    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//        friends.clear();
+//        for(DataSnapshot uid:snapshot.getChildren()){
+//            if(uid.getValue().equals(curr_user.getUid())){
+//                uid.getRef().removeValue();
+//                notifyDataSetChanged();
+//            }
+//        }
+//    }
+//
+//    @Override
+//    public void onCancelled(@NonNull DatabaseError error) {
+//
+//    }
 
 
     public class FriendScreenUserViewHolder extends RecyclerView.ViewHolder{

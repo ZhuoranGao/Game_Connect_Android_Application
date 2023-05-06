@@ -24,7 +24,6 @@ public class AfterLoginMainActivity extends AppCompatActivity implements Profile
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_after_login_main);
         binding = ActivityAfterLoginMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         mAuth = FirebaseAuth.getInstance();
